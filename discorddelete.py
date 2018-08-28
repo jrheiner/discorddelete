@@ -1,5 +1,6 @@
 import requests
 import time
+import sys
 
 # --- USER CONFIG ---
 authToken = ""
@@ -15,12 +16,11 @@ def load_messages():
     r = requests.get("https://discordapp.com/api/v6/guilds/" + str(serverId) +
                      "/messages/search?author_id=" + str(userId),
                      headers={"Authorization": authToken})
+
     if r.status_code == 200:
         pass
-        # print("success load")
     elif r.status_code == 429:
         pass
-        # print("too many messages load")
     response = r.json()
     if response["total_results"] == 0:
         return None
@@ -60,5 +60,10 @@ def main():
     main()
 
 
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\nShutting down...", end="")
+        time.sleep(2)
+        sys.exit()
