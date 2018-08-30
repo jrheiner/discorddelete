@@ -48,7 +48,8 @@ def delete_message(message):
 
 def loading_output(mode, bc=0, mc=0):
     if mode == "w":
-        msg = "[i] Deleting messages{:5s} [batch #{}]".format("." * (mc % 5), bc)
+        msg = "[-] Deleting messages{:5s} [batch #{}]".format(
+            "." * (mc % 5), bc)
     elif mode == "x":
         msg = "[!] Finished deleting {} messages!          ".format(mc)
     return msg
@@ -60,7 +61,9 @@ def main():
     batchCount += 1
     if loadedMessages is None:
         print("\r" + loading_output("x", mc=msgCount), end="", flush=True)
-        return
+        print("\n[!] Shutting down...", end="")
+        time.sleep(2)
+        sys.exit()
     for batch in loadedMessages["messages"]:
         for msg in batch:
             if msg["author"]["id"] == userId:
@@ -81,9 +84,9 @@ if __name__ == "__main__":
           ___/ /__ / /__ / /____ 
          / _  / -_) / -_) __/ -_)
          \_,_/\__/_/\__/\__/\__/                           
-""")    
+""")
         info = load_user()
-        print(("[i] User >> {}#{} <<").format(info[0], info[1]))
+        print(("[+] User >> {}#{} <<").format(info[0], info[1]))
         main()
     except KeyboardInterrupt:
         print("\n[!] Shutting down...", end="")
