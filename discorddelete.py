@@ -12,6 +12,15 @@ batchCount = 0
 msgCount = 0
 
 
+def load_user():
+    r = requests.get("https://discordapp.com/api/v6/users/@me",
+                     headers={"Authorization": authToken})
+    response = r.json()
+    username = response["username"]
+    discriminator = response["discriminator"]
+    return [username, discriminator]
+
+
 def load_messages():
     r = requests.get("https://discordapp.com/api/v6/guilds/" + str(serverId) +
                      "/messages/search?author_id=" + str(userId),
@@ -39,9 +48,9 @@ def delete_message(message):
 
 def loading_output(mode, bc=0, mc=0):
     if mode == "w":
-        msg = "Deleting messages{:5s} [batch #{}]".format("." * (mc % 5), bc)
+        msg = "[i] Deleting messages{:5s} [batch #{}]".format("." * (mc % 5), bc)
     elif mode == "x":
-        msg = "Finished deleting {} messages!          ".format(mc)
+        msg = "[!] Finished deleting {} messages!          ".format(mc)
     return msg
 
 
@@ -56,14 +65,28 @@ def main():
         for msg in batch:
             if msg["author"]["id"] == userId:
                 delete_message(msg)
-                print("\r" + loading_output("w", bc=batchCount, mc=msgCount), end="")
+                print("\r" + loading_output("w",
+                                            bc=batchCount, mc=msgCount), end="")
     main()
 
 
 if __name__ == "__main__":
     try:
+        print("""
+     ___                     __  
+ ___/ (_)__ _______  _______/ /  
+/ _  / (_-</ __/ _ \/ __/ _  /   
+\_,_/_/___/\__/\___/_/  \_,_/    
+              __    __    __     
+          ___/ /__ / /__ / /____ 
+         / _  / -_) / -_) __/ -_)
+         \_,_/\__/_/\__/\__/\__/                           
+""")    
+        info = load_user()
+        print(("[i] User >> {}#{} <<").format(info[0], info[1]))
         main()
     except KeyboardInterrupt:
-        print("\nShutting down...", end="")
+        print("\n[!] Shutting down...", end="")
         time.sleep(2)
         sys.exit()
+    load_user()
