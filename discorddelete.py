@@ -10,6 +10,7 @@ serverId = ""
 
 batchCount = 0
 msgCount = 0
+# rDelay = 0
 
 
 def load_user():
@@ -30,6 +31,8 @@ def load_messages():
         pass
     elif r.status_code == 429:
         pass
+        # rDelay += rDelay
+        # time.sleep(rDelay)
     response = r.json()
     if response["total_results"] == 0:
         return None
