@@ -10,12 +10,13 @@ serverId = ""
 
 batchCount = 0
 msgCount = 0
-# rDelay = 0
+global rDelay
+rDelay = 0
 
 
 def load_user():
     r = requests.get("https://discordapp.com/api/v6/users/@me",
-                     headers={"Authorization": authToken})
+                     headers={"Authorization": authToken}, timeout=15)
     response = r.json()
     username = response["username"]
     discriminator = response["discriminator"]
@@ -30,9 +31,11 @@ def load_messages():
     if r.status_code == 200:
         pass
     elif r.status_code == 429:
-        pass
-        # rDelay += rDelay
-        # time.sleep(rDelay)
+        global rDelay
+        rDelay += 5
+        return False
+    else:
+        return False
     response = r.json()
     if response["total_results"] == 0:
         return None
@@ -65,8 +68,20 @@ def main():
     if loadedMessages is None:
         print("\r" + loading_output("x", mc=msgCount), end="", flush=True)
         print("\n[!] Shutting down...", end="")
-        time.sleep(2)
+        time.sleep(3)
         sys.exit()
+    if loadedMessages is False:
+        timeout = rDelay % 120
+        for t in range(timeout, -1, -1):
+            if t > 0:
+                print(
+                    ("\r" + "[x] Discord API timeout (retry in {}s)   ").format(t), end="", flush=True)
+                time.sleep(1)
+            else:
+                print(
+                    "\r" + "[x] Discord API timeout (retrying...)   ", end="", flush=True)
+                time.sleep(1)
+        main()
     for batch in loadedMessages["messages"]:
         for msg in batch:
             if msg["author"]["id"] == userId:
@@ -89,10 +104,24 @@ if __name__ == "__main__":
          \_,_/\__/_/\__/\__/\__/                           
 """)
         info = load_user()
-        print(("[+] User >> {}#{} <<").format(info[0], info[1]))
+        print(("[+] User >> {}#{}").format(info[0], info[1]))
         main()
     except KeyboardInterrupt:
         print("\n[!] Shutting down...", end="")
-        time.sleep(2)
+        time.sleep(3)
         sys.exit()
-    load_user()
+    except requests.exceptions.Timeout:
+        print("\r[x] Network connection timeout", end="")
+        print("\n[!] Shutting down...", end="")
+        time.sleep(5)
+        sys.exit()
+    except requests.exceptions.ConnectionError:
+        print("\r[x] Network connectivity limited or unavailable", end="")
+        print("\n[!] Shutting down...", end="")
+        time.sleep(5)
+        sys.exit()
+    except requests.exceptions.RequestException:
+        print("\r[x] Unexpected error occured", end="")
+        print("\n[!] Shutting down...", end="")
+        time.sleep(5)
+        sys.exit()
