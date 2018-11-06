@@ -80,8 +80,8 @@ def main():
     batchCount += 1
     if loadedMessages is None:
         print("\r" + loading_output("x", mc=msgCount), end="", flush=True)
-        print("\n[!] Shutting down...", end="")
-        time.sleep(3)
+        print("\n[!] Press any key to exit...", end="")
+        input()
         sys.exit()
     if loadedMessages is False:
         timeout = rDelay % 120
@@ -141,3 +141,4 @@ if __name__ == "__main__":
         print("\n[!] Shutting down...", end="")
         time.sleep(5)
         sys.exit()
+
