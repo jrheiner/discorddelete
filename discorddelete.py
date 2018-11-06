@@ -20,9 +20,20 @@ def load_user():
     r = requests.get("https://discordapp.com/api/v6/users/@me",
                      headers={"Authorization": authToken}, timeout=15)
     response = r.json()
-    username = response["username"]
-    discriminator = response["discriminator"]
-    return [username, discriminator]
+    try:
+        username = response["username"]
+        discriminator = response["discriminator"]
+        return [username, discriminator]
+    except KeyError:
+        print(
+            "\r[x] Authorization failed",
+            end="")
+        print(
+            "\n[x] Possibly invalid 'authToken' provided",
+            end="")
+        print("\n[!] Shutting down...", end="")
+        time.sleep(5)
+        sys.exit()
 
 
 def load_messages():
@@ -77,11 +88,13 @@ def main():
         for t in range(timeout, -1, -1):
             if t > 0:
                 print(
-                    ("\r" + "[x] Discord API timeout (retry in {}s)   ").format(t), end="", flush=True)
+                    ("\r" + "[x] Discord API timeout (retry in {}s)   ")
+                    .format(t), end="", flush=True)
                 time.sleep(1)
             else:
                 print(
-                    "\r" + "[x] Discord API timeout (retrying...)   ", end="", flush=True)
+                    "\r" + "[x] Discord API timeout (retrying...)   ",
+                    end="", flush=True)
                 time.sleep(1)
         main()
     for batch in loadedMessages["messages"]:
@@ -89,21 +102,22 @@ def main():
             if msg["author"]["id"] == userId:
                 delete_message(msg)
                 print("\r" + loading_output("w",
-                                            bc=batchCount, mc=msgCount), end="")
+                                            bc=batchCount, mc=msgCount),
+                      end="")
     main()
 
 
 if __name__ == "__main__":
     try:
         print("""
-     ___                     __  
- ___/ (_)__ _______  _______/ /  
-/ _  / (_-</ __/ _ \/ __/ _  /   
-\_,_/_/___/\__/\___/_/  \_,_/    
-              __    __    __     
-          ___/ /__ / /__ / /____ 
+     ___                     __
+ ___/ (_)__ _______  _______/ /
+/ _  / (_-</ __/ _ \/ __/ _  /
+\_,_/_/___/\__/\___/_/  \_,_/
+              __    __    __
+          ___/ /__ / /__ / /____
          / _  / -_) / -_) __/ -_)
-         \_,_/\__/_/\__/\__/\__/                           
+         \_,_/\__/_/\__/\__/\__/
 """)
         info = load_user()
         print(("[+] User >> {}#{}").format(info[0], info[1]))
