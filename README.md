@@ -13,3 +13,7 @@ Simple script to delete all messages sent in a specific server.
     * Click on the request to open the details, and on the Headers tab, copy the 'authorization' token.
 
 ## TODO
+
+* implement [bulk-delete-messages](https://discordapp.com/developers/docs/resources/channel#bulk-delete-messages) to delete most recent messages instead of using single requests
+
+* add indicator of messages left or progessbar of deleted messages/total messages
