@@ -6,8 +6,6 @@ import sys
 authToken = ""
 userId = ""
 serverId = ""
-# If you are not sure how to get user and server id check:
-# https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-
 # -------------------
 
 batchCount = 0
