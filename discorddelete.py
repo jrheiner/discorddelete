@@ -1,6 +1,7 @@
-import requests
-import time
 import sys
+import time
+
+import requests
 
 # --- USER CONFIG ---
 authToken = ""
@@ -63,12 +64,9 @@ def delete_message(message):
         msgCount += 1
 
 
-def loading_output(mode, bc=0, mc=0):
-    if mode == "w":
-        msg = "[-] Deleting messages{:5s} [batch #{}]".format(
-            "." * (mc % 5), bc)
-    elif mode == "x":
-        msg = "[!] Finished deleting {} messages!          ".format(mc)
+def loading_output(bc=0, mc=0):
+    msg = "[-] Deleting messages{:5s} [batch #{}]".format(
+        "." * (mc % 5), bc)
     return msg
 
 
@@ -77,10 +75,9 @@ def main():
     global batchCount
     batchCount += 1
     if loadedMessages is None:
-        print("\r" + loading_output("x", mc=msgCount), end="", flush=True)
-        print("\n[!] Press any key to exit...", end="")
-        input()
-        sys.exit()
+        print("\r[!] Finished deleting {} messages!          ".format(
+            msgCount), end="", flush=True)
+        exit()
     if loadedMessages is False:
         timeout = rDelay % 120
         for t in range(timeout, -1, -1):
@@ -99,10 +96,21 @@ def main():
         for msg in batch:
             if msg["author"]["id"] == userId:
                 delete_message(msg)
-                print("\r" + loading_output("w",
-                                            bc=batchCount, mc=msgCount),
+                print("\r" + loading_output(bc=batchCount, mc=msgCount),
                       end="")
     main()
+
+
+def exit():
+    print("\n[!] Press any key to exit...", end="")
+    input()
+    sys.exit()
+
+
+def shutdown(t):
+    print("\n[!] Shutting down...", end="")
+    time.sleep(t)
+    sys.exit()
 
 
 if __name__ == "__main__":
@@ -121,22 +129,13 @@ if __name__ == "__main__":
         print(("[+] User >> {}#{}").format(info[0], info[1]))
         main()
     except KeyboardInterrupt:
-        print("\n[!] Shutting down...", end="")
-        time.sleep(3)
-        sys.exit()
+        shutdown(3)
     except requests.exceptions.Timeout:
         print("\r[x] Network connection timeout", end="")
-        print("\n[!] Shutting down...", end="")
-        time.sleep(5)
-        sys.exit()
+        exit()
     except requests.exceptions.ConnectionError:
         print("\r[x] Network connectivity limited or unavailable", end="")
-        print("\n[!] Shutting down...", end="")
-        time.sleep(5)
-        sys.exit()
+        exit()
     except requests.exceptions.RequestException:
         print("\r[x] Unexpected error occured", end="")
-        print("\n[!] Shutting down...", end="")
-        time.sleep(5)
-        sys.exit()
-
+        exit()
