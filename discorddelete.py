@@ -30,9 +30,7 @@ def load_user():
         print(
             "\n[x] Possibly invalid 'authToken' provided",
             end="")
-        print("\n[!] Shutting down...", end="")
-        time.sleep(5)
-        sys.exit()
+        exit()
 
 
 def load_messages():
