@@ -10,9 +10,10 @@ Script to delete all messages of a user sent in a specific server.
 2. Get your authorization token
     * [How to find your authorization token](https://discordhelp.net/discord-token)
     * **DO NOT SHARE IT**
-    
+
 3. Fill out the user config at the top the script
-   ```
+
+   ```python
    # --- USER CONFIG ---
    authToken = ""
    userId = ""
