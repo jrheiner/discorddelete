@@ -26,6 +26,9 @@ Script to delete all messages of a user sent in a specific server.
 
 * [Python 3.6+](https://www.python.org/downloads/)
 
+* [Python Package `colorama`](https://pypi.org/project/colorama/)
+    > pip install colorama
+
 ## TODO
 
 * implement [bulk-delete-messages](https://discordapp.com/developers/docs/resources/channel#bulk-delete-messages) to delete most recent messages instead of using single requests
