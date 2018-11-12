@@ -24,12 +24,12 @@ def load_user():
         discriminator = response["discriminator"]
         return [username, discriminator]
     except KeyError:
-        print(
-            "\r[x] Authorization failed",
-            end="")
-        print(
-            "\n[x] Possibly invalid 'authToken' provided",
-            end="")
+        print(Fore.RED +
+              "\r[x] Authorization failed",
+              end="")
+        print(Fore.RED +
+              "\n[x] Possibly invalid 'authToken' provided",
+              end="")
         exit()
 
 
@@ -73,21 +73,22 @@ def main():
     global batchCount
     batchCount += 1
     if loadedMessages is None:
-        print("\r[!] Finished deleting {} messages!          ".format(
-            msgCount), end="", flush=True)
+        print(Fore.GREEN +
+              "\r[!] Finished deleting {} messages!          ".format(
+                  msgCount), end="", flush=True)
         exit()
     if loadedMessages is False:
         timeout = rDelay % 120
         for t in range(timeout, -1, -1):
             if t > 0:
                 print(
-                    ("\r" + "[x] Discord API timeout (retry in {}s)   ")
+                    (Fore.RED + "\r[x] Discord API timeout (retry in {}s)   ")
                     .format(t), end="", flush=True)
                 time.sleep(1)
             else:
-                print(
-                    "\r" + "[x] Discord API timeout (retrying...)   ",
-                    end="", flush=True)
+                print(Fore.RED +
+                      "\r[x] Discord API timeout (retrying...)   ",
+                      end="", flush=True)
                 time.sleep(1)
         main()
     for batch in loadedMessages["messages"]:
@@ -100,19 +101,21 @@ def main():
 
 
 def exit():
-    print("\n[!] Press any key to exit...", end="")
+    print(Fore.LIGHTBLACK_EX + "\n[!] Press any key to exit...", end="")
     input()
     sys.exit()
 
 
 def shutdown(t):
-    print("\n[!] Shutting down...", end="")
+    print(Fore.LIGHTBLACK_EX + "\n[!] Shutting down...", end="")
     time.sleep(t)
     sys.exit()
 
 
 if __name__ == "__main__":
     try:
+        from colorama import init, Fore, Back, Style
+        init()
         print("""
      ___                     __
  ___/ (_)__ _______  _______/ /
@@ -129,11 +132,17 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         shutdown(3)
     except requests.exceptions.Timeout:
-        print("\r[x] Network connection timeout", end="")
+        print(Fore.RED + "\r[x] Network connection timeout", end="")
         exit()
     except requests.exceptions.ConnectionError:
-        print("\r[x] Network connectivity limited or unavailable", end="")
+        print(
+            Fore.RED + "\r[x] Network connectivity limited or unavailable",
+            end="")
         exit()
     except requests.exceptions.RequestException:
-        print("\r[x] Unexpected error occured", end="")
+        print(Fore.RED + "\r[x] Unexpected error occured", end="")
+        exit()
+    except (ImportError, ModuleNotFoundError):
+        print("\r[x] Missing 'colorama' package", end="")
+        print("\n[x] Type 'pip install colorama' to install it", end="")
         exit()
