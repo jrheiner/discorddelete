@@ -1,7 +1,6 @@
 import sys
 import time
 
-import requests
 
 # --- USER CONFIG ---
 authToken = ""
@@ -114,6 +113,7 @@ def shutdown(t):
 
 if __name__ == "__main__":
     try:
+        import requests
         from colorama import init, Fore, Back, Style
         init()
         print("""
@@ -142,7 +142,9 @@ if __name__ == "__main__":
     except requests.exceptions.RequestException:
         print(Fore.RED + "\r[x] Unexpected error occured", end="")
         exit()
-    except (ImportError, ModuleNotFoundError):
-        print("\r[x] Missing 'colorama' package", end="")
-        print("\n[x] Type 'pip install colorama' to install it", end="")
-        exit()
+    except (ImportError, ModuleNotFoundError, NameError):
+        print("\r[x] Missing packages 'colorama' or 'requests'", end="")
+        print("\n[x] Type 'pip install colorama requests' to install", end="")
+        print("\n[!] Press any key to exit...", end="")
+    input()
+    sys.exit()
