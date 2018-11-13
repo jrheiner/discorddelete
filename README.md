@@ -28,7 +28,10 @@ Script to delete all messages of a user sent in a specific server.
 * [Python 3.6+](https://www.python.org/downloads/)
 
 * [Python Package `colorama`](https://pypi.org/project/colorama/)
-    > pip install colorama
+
+* [Python Package `requests`](https://pypi.org/project/requests/)
+
+    > pip install colorama requests
 
 ## TODO
 

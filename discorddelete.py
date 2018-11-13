@@ -1,7 +1,6 @@
 import sys
 import time
 
-
 # --- USER CONFIG ---
 authToken = ""
 userId = ""
@@ -131,6 +130,12 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt:
         shutdown(3)
+    except (ImportError, ModuleNotFoundError, NameError):
+        print("\r[x] Missing packages 'colorama' or 'requests'", end="")
+        print("\n[x] Type 'pip install colorama requests' to install", end="")
+        print("\n[!] Press any key to exit...", end="")
+        input()
+        sys.exit()
     except requests.exceptions.Timeout:
         print(Fore.RED + "\r[x] Network connection timeout", end="")
         exit()
@@ -142,9 +147,3 @@ if __name__ == "__main__":
     except requests.exceptions.RequestException:
         print(Fore.RED + "\r[x] Unexpected error occured", end="")
         exit()
-    except (ImportError, ModuleNotFoundError, NameError):
-        print("\r[x] Missing packages 'colorama' or 'requests'", end="")
-        print("\n[x] Type 'pip install colorama requests' to install", end="")
-        print("\n[!] Press any key to exit...", end="")
-    input()
-    sys.exit()
