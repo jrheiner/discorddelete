@@ -7,9 +7,15 @@ Script to delete all messages of a user sent in a specific server.
 1. Get your user and server id
     * [How to find user and server id](https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-)
 
-2. Get your authorization token
-    * [How to find your authorization token](https://discordhelp.net/discord-token)
-    * **DO NOT SHARE IT**
+2. Get your authorization token (**DO NOT SHARE IT**)
+    * Go to the [discord webclient](https://discordapp.com/channels/@me) and sign in
+
+    * Type `javascript:` in the URL bar and copy the following
+
+        ```js
+        prompt("Your discord authToken", document.body.appendChild(document.createElement`iframe`).contentWindow.localStorage.token.replace(/"/g, ""));
+        ```
+
 
 3. Fill out the user config at the top the script
 
@@ -32,9 +38,3 @@ Script to delete all messages of a user sent in a specific server.
 * [Python Package `requests`](https://pypi.org/project/requests/)
 
     > pip install colorama requests
-
-## TODO
-
-* implement [bulk-delete-messages](https://discordapp.com/developers/docs/resources/channel#bulk-delete-messages) to delete most recent messages instead of using single requests
-
-* add indicator of messages left or progessbar of deleted messages/total messages
